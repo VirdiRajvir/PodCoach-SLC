@@ -1,31 +1,54 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
+from generate_script import generate_script
+from generate_audio import generate_audio
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+@app.route('/', methods=['GET', 'POST'])
+def landing():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        if not username:
+            error = "Please enter your name."
+            return render_template('landing.html', error=error)
+        # Redirect to goal_selection with username in query string
+        return redirect(url_for('goal_selection', username=username))
+    return render_template('landing.html')
 
-@app.route('/greet/<name>')
-def greet(name):
-    return f'Hello, {name}!'
 
-@app.route('/goalselection')
-def goal_selection():
-    return 'Goal Selection Page'
-
+@app.route('/goal_selection', defaults={'goal': None})
 @app.route('/goal_selection/<goal>')
-def goal_selection_with_param(goal):
-    return f'Goal Selection for: {goal}'
+def goal_selection(goal=None):
+    username = request.args.get('username')
+    if goal is None:
+        # No goal selected yet — show list of goals
+        goals = ["Focus", "Confidence", "Motivation"]
+        return render_template('goal_selection.html', goals=goals, username=username)
+    else:
+        # Goal is selected — show confirmation or next step
+        return render_template('coaching.html', goal=goal, username=username)
 
-@app.route('/goal_selection/<goal>/coaching')
-def goal_selection_coaching(goal):
-    return f'Coaching for Goal: {goal}'
 
-@app.route('/goal_selection/<goal>/coaching/summarypage')
-def goal_selection_coaching_summary(goal):
-    return f'Summary Page for Coaching Goal: {goal}'
+@app.route('/start_coaching', methods=['POST'])
+def start_coaching():
+    goal = request.form.get('goal')
+    if not goal:
+        return "No goal provided", 400
 
-@app.route('/goal_selection/<goal>/coaching/feedback')
-def goal_selection_coaching_feedback(goal):
-    return f'Feedback for Coaching Goal: {goal}'
+    # 1. Generate script
+    script = generate_script(goal)
+
+    # 2. Generate audio from script
+    audio_file = generate_audio(script)  # returns something like 'static/audio/abc123.mp3'
+
+    # 3. Redirect to coaching page with audio
+    return render_template('coaching.html', goal=goal, script=script, audio_url='/' + audio_file)
+
+
+@app.route('/summary')
+def goal_selection_coaching_summary():
+    return render_template('summary.html')
+
+@app.route('/feedback')
+def goal_selection_coaching_feedback():
+    return render_template('feedback.html')
