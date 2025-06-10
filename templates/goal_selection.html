@@ -9,6 +9,7 @@
     {% for goal in goals %}
     <form action="/start_coaching" method="POST">
         <input type="hidden" name="goal" value="{{ goal }}">
+        <input type="hidden" name="username" value="{{ username }}">
         <button type="submit">{{ goal }}</button>
     </form>
     {% endfor %}

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from generate_script import generate_script
-from generate_audio import generate_audio
+from generate_audio import generate_audio_file
 
 app = Flask(__name__)
 
@@ -32,17 +32,18 @@ def goal_selection(goal=None):
 @app.route('/start_coaching', methods=['POST'])
 def start_coaching():
     goal = request.form.get('goal')
+    username = request.form.get('username')
     if not goal:
         return "No goal provided", 400
 
     # 1. Generate script
-    script = generate_script(goal)
+    script = generate_script(goal, username)
 
     # 2. Generate audio from script
-    audio_file = generate_audio(script)  # returns something like 'static/audio/abc123.mp3'
+    audio_file = generate_audio_file(script)  # returns something like 'static/audio/abc123.mp3'
 
     # 3. Redirect to coaching page with audio
-    return render_template('coaching.html', goal=goal, script=script, audio_url='/' + audio_file)
+    return render_template('coaching.html', goal=goal, script=script, audio_url='/' + audio_file, username=username)
 
 
 @app.route('/summary')
