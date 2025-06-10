@@ -18,5 +18,6 @@ build/
 static/audio/
 static/script/
 static/summary/
+static/feedback/
 
 .DS_Store
