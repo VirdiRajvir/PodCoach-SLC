@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from generate_script import generate_script
 from generate_audio import generate_audio_file
 from generate_response import generate_response
-
+import os
 
 app = Flask(__name__)
 
@@ -61,9 +61,33 @@ def summary():
         coaching_script = file.read()
     return render_template('summary.html', summary=summary_content, script=coaching_script)
 
-@app.route('/feedback')
+@app.route('/feedback', methods=['GET'])
 def feedback(): 
     return render_template('feedback.html')
+
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    feedback = request.form.get('feedback')
+    if not feedback:
+        return "No feedback provided", 400
+
+    if os.path.exists('static/feedback/feedback.txt'):
+        with open('static/feedback/feedback.txt', 'r') as file:
+            existing_feedback = file.read()
+        if feedback in existing_feedback:
+            return redirect(url_for('feedback_thanks'))
+    else:
+        existing_feedback = ""
+    # Here you would typically save the feedback to a database or file
+    with open('static/feedback/feedback.txt', 'a') as file:
+        file.write(feedback + '\n')
+
+    return redirect(url_for('feedback_thanks'))
+
+
+@app.route('/feedback_thanks', methods=['GET'])
+def feedback_thanks():
+    return render_template('feedback_thanks.html')
 
 @app.route('/chat', methods=['POST'])
 def chat():
