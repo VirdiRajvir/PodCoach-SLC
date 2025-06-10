@@ -55,7 +55,9 @@ def start_coaching():
 def summary():
     with open('static/summary/summary.txt', 'r') as file:
         summary_content = file.read()
-    return render_template('summary.html', summary=summary_content)
+    with open('static/script/coaching_script.txt', 'r') as file:
+        coaching_script = file.read()
+    return render_template('summary.html', summary=summary_content, script=coaching_script)
 
 @app.route('/feedback')
 def feedback(): 

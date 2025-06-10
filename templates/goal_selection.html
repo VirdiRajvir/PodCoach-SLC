@@ -6,12 +6,17 @@
     <p>Choose your goal:</p>
 {% endif %}
 <ul>
+    <div class="text-center row">
+
     {% for goal in goals %}
+    <div class="col-md-4 mb-3">
     <form action="/start_coaching" method="POST">
         <input type="hidden" name="goal" value="{{ goal }}">
         <input type="hidden" name="username" value="{{ username }}">
-        <button type="submit">{{ goal }}</button>
+        <button type="submit" class="btn border-white">{{ goal }}</button>
     </form>
+    </div>
     {% endfor %}
+    </div>
 </ul>
 {% endblock %}

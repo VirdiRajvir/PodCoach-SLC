@@ -2,12 +2,11 @@
 {% block content %}
 <h2>Coaching Session: {{ goal }}</h2>
 <p>This is where the AI coach will guide the session for your selected goal.</p>
-<h2>Coaching for Goal: {{ goal }}</h2>
 
 <audio controls>
   <source src="{{ audio_url }}" type="audio/mpeg">
   Your browser does not support the audio tag.
 </audio>
 <br>
-<a href="{{ url_for('summary') }}">Finish and View Summary</a>
+<a class="link-underline-opacity-25 link-opacity-50 link-success" href="{{ url_for('summary') }}">Finish and View Summary</a>
 {% endblock %}
