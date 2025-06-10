@@ -36,20 +36,27 @@ def start_coaching():
     if not goal:
         return "No goal provided", 400
 
-    # 1. Generate script
-    script = generate_script(goal, username)
+    # # 1. Generate script
+    # script = generate_script(goal, username)
 
-    # 2. Generate audio from script
-    audio_file = generate_audio_file(script)  # returns something like 'static/audio/abc123.mp3'
+    # # 2. Generate audio from script
+    # audio_file = generate_audio_file(script)  # returns something like 'static/audio/abc123.mp3'
+
+    with open('static/script/coaching_script.txt', 'r') as file:
+        script = file.read()
+    audio_file = 'static/audio/generated_audio.mp3'
+
 
     # 3. Redirect to coaching page with audio
     return render_template('coaching.html', goal=goal, script=script, audio_url='/' + audio_file, username=username)
 
 
 @app.route('/summary')
-def goal_selection_coaching_summary():
-    return render_template('summary.html')
+def summary():
+    with open('static/summary/summary.txt', 'r') as file:
+        summary_content = file.read()
+    return render_template('summary.html', summary=summary_content)
 
 @app.route('/feedback')
-def goal_selection_coaching_feedback():
+def feedback(): 
     return render_template('feedback.html')
