@@ -8,7 +8,7 @@
 </head>
 <body style="background-color: #000000;
 color: #38964b;">
-<div class="container" style="font-family: Comic Sans MS;">
+<div class="container p-5" style="font-family: Comic Sans MS;">
     <div class="row gap-5">
         <div class="col-md-4 border border-success rounded-2">
             <h2>Coaching Summary</h2>
@@ -19,6 +19,66 @@ color: #38964b;">
             <p>{{script}}</p>
         </div>
     </div>
+    <br>
+    <div class="row gap-5">
+        <div class="col-md-10 border border-success rounded-2 p-3 d-flex flex-column" style="height: 400px;">
+            <h2>Chat with Coach</h2>
+            
+            <!-- Chat messages area -->
+            <div id="chat-box" class="flex-grow-1 border rounded bg-dark text-light p-2 overflow-auto mb-3" style="max-height: 250px;">
+                <!-- Example messages -->
+                <div><strong>You:</strong> Hello</div>
+                <div><strong>Coach:</strong> Hi! How can I help you today?</div>
+            </div>
+
+            <!-- Input area -->
+            <form id="chat-form" class="d-flex">
+                <input type="text" id="chat-input" class="form-control me-2" placeholder="Type your message..." required>
+                <button type="submit" class="btn btn-success">Send</button>
+            </form>
+        </div>
+        <div class="col border border-success rounded-2 text-center vh d-flex flex-column justify-content-center align-items-center">
+             <a class="link-underline-opacity-25 link-opacity-50 link-success" href="{{ url_for('feedback') }}">Give Feedback</a>
+        </div>
+    </div>
+    
 </div>
+<script>
+document.getElementById("chat-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const input = document.getElementById("chat-input");
+    const chatBox = document.getElementById("chat-box");
+
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
+
+    // Append user's message
+    chatBox.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
+
+    // Send message to backend
+    try {
+        const response = await fetch('/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: userMessage })
+        });
+
+        const data = await response.json();
+        const coachResponse = data.response || "Sorry, something went wrong.";
+
+        chatBox.innerHTML += `<div><strong>Coach:</strong> ${coachResponse}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    } catch (err) {
+        console.error(err);
+        chatBox.innerHTML += `<div><strong>Coach:</strong> Error processing message.</div>`;
+    }
+
+    input.value = '';
+});
+</script>
+
+
 </body>
 </html>
