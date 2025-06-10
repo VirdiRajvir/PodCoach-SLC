@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from generate_script import generate_script
-from generate_audio import generate_audio_file
-from generate_response import generate_response
+from generate_audio import generate_audio
+from generate_response import generate_response, append_message
 import os
-
+from langchain_ollama import ChatOllama
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -38,15 +38,15 @@ def start_coaching():
     if not goal:
         return "No goal provided", 400
 
-    # # 1. Generate script
-    # script = generate_script(goal, username)
+    # 1. Generate script
+    script = generate_script(goal, username)
 
-    # # 2. Generate audio from script
-    # audio_file = generate_audio_file(script)  # returns something like 'static/audio/abc123.mp3'
+    # 2. Generate audio from script
+    audio_file = generate_audio(script, username, goal)  # returns something like 'static/audio/abc123.mp3'
 
-    with open('static/script/coaching_script.txt', 'r') as file:
-        script = file.read()
-    audio_file = 'static/audio/generated_audio.mp3'
+    # with open('static/script/coaching_script.txt', 'r') as file:
+    #     script = file.read()
+    # audio_file = 'static/audio/generated_audio.mp3'
 
 
     # 3. Redirect to coaching page with audio
@@ -97,5 +97,6 @@ def chat():
 
     user_message = data['message']
     coach_reply = generate_response(user_message)
+    append_message(coach_reply)
 
     return jsonify({'response': coach_reply})
