@@ -8,7 +8,7 @@ def generate_script(goal, name):
     response = llm.invoke(system_prompt)
 
 
-    system_prompt = f"You are a summarizer assistant. Summarize the following coaching transcript highlighting the key points and actionable steps: {response.content}"
+    system_prompt = f"You are a summarizer assistant. Summarize the following coaching transcript and write only 3 actionable points: {response.content}"
     with open('static/summary/summary.txt', 'w') as file:
         summary_response = llm.invoke(system_prompt)
         file.write(summary_response.content)
