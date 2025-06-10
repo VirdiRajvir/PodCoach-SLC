@@ -3,38 +3,55 @@
 <h2>Coaching Session: {{ goal }}</h2>
 <p>This is where the AI coach will guide the session for your selected goal.</p>
 
-<audio controls>
-  <source src="{{ audio_url }}" type="audio/mpeg">
-  Your browser does not support the audio tag.
-</audio>
-<br>
-<a class="link-underline-opacity-25 link-opacity-50 link-success" href="{{ url_for('summary') }}">Finish and View Summary</a>
 <div id="timer" style="font-size: 18px; font-weight: bold; color: #38964b;">
   Time left: 20:00
 </div>
 
+<audio id="audio" controls src="{{ audio_url }}"></audio>
+
 <script>
   let timeLeft = 20 * 60; // 20 minutes in seconds
   const timerElement = document.getElementById('timer');
+  const audio = document.getElementById('audio');
 
-  const countdown = setInterval(() => {
+  let countdown = null;
+
+  function updateTimer() {
     const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
     const seconds = (timeLeft % 60).toString().padStart(2, '0');
     timerElement.textContent = `Time left: ${minutes}:${seconds}`;
 
     if (timeLeft <= 0) {
       clearInterval(countdown);
-      // Redirect to summary page
-      window.location.href = "{{ url_for('summary') }}"; 
+      window.location.href = "{{ url_for('summary') }}";
     }
     timeLeft--;
-  }, 1000);
+  }
+
+  function startTimer() {
+    if (!countdown) {  // prevent multiple intervals
+      countdown = setInterval(updateTimer, 1000);
+    }
+  }
+
+  function pauseTimer() {
+    clearInterval(countdown);
+    countdown = null;
+  }
+
+  audio.addEventListener('play', () => {
+    startTimer();
+  });
+
+  audio.addEventListener('pause', () => {
+    pauseTimer();
+  });
+
+  // Start timer if audio is already playing on load
+  if (!audio.paused) {
+    startTimer();
+  }
 </script>
 
 {% endblock %}
-<script>
-  // 20 minutes = 1200,000 milliseconds
-  setTimeout(() => {
-    window.location.href = "{{ url_for('summary') }}"; // Adjust route name as needed
-  }, 20 * 60 * 1000);
-</script>
+
