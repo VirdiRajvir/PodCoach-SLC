@@ -1,7 +1,7 @@
 from langchain_ollama import ChatOllama
 
 def generate_script(goal, name):
-    system_prompt = f"You are an AI coach helping users achieve {goal} for {name}. Generate a motivational coaching script for {name} that lasts about 20 minutes, encouraging and guiding {name} through their goal. The script should be engaging, supportive, and provide actionable steps. Use a friendly and encouraging tone."
+    system_prompt = f"You are an AI coach. Your task is to create a personalized speech for {name}, who wants to work on their goal of {goal}. The speech HAS TO be above 2800 words. "
     llm = ChatOllama(model="llama3",
                  temperature=0.1)
 
