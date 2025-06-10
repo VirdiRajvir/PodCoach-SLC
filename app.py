@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from generate_script import generate_script
 from generate_audio import generate_audio_file
+from generate_response import generate_response
+
 
 app = Flask(__name__)
 
@@ -62,3 +64,14 @@ def summary():
 @app.route('/feedback')
 def feedback(): 
     return render_template('feedback.html')
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = request.get_json()
+    if not data or 'message' not in data:
+        return jsonify({'error': 'No message provided'}), 400
+
+    user_message = data['message']
+    coach_reply = generate_response(user_message)
+
+    return jsonify({'response': coach_reply})
