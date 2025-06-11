@@ -6,7 +6,7 @@
 <div id="timer" style="font-size: 18px; font-weight: bold; color: #38964b;">
   Time left: 20:00
 </div>
-
+<img id="coach-gif" src="{{ url_for('static', filename='giffy.gif') }}" alt="Coach Animation" style=" width:500px; height:auto; margin-top:10px;">
 <audio id="audio" controls src="{{ audio_url }}"></audio>
 <br>
 <a class="link-underline-opacity-25 link-opacity-50 link-success" href="{{ url_for('summary') }}">Finish and View Summary</a>
@@ -15,6 +15,20 @@
   let timeLeft = 20 * 60; // 20 minutes in seconds
   const timerElement = document.getElementById('timer');
   const audio = document.getElementById('audio');
+  // const coachGif = document.getElementById('coach-gif');
+  // audio.addEventListener('play', () => {
+  //   startTimer();
+  //   coachGif.style.display = 'block';
+  // });
+
+  // audio.addEventListener('pause', () => {
+  //   pauseTimer();
+  //   coachGif.style.display = 'none';
+  // });
+
+  // audio.addEventListener('ended', () => {
+  //   coachGif.style.display = 'none';
+  // });
 
   let countdown = null;
 
