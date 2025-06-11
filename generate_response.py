@@ -12,7 +12,7 @@ messages = [
     }
 ]
 
-def generate_response(prompt):
+def generate_response(prompt, session_messages):
     """
     Generate a response using the LLM based on the provided prompt.
     
@@ -22,21 +22,9 @@ def generate_response(prompt):
     Returns:
         str: The generated response from the LLM.
     """
-    global first_run
-    global messages
-    print(first_run)
-    if first_run:
-        first_run = False
-        with open('static/script/coaching_script.txt', 'r') as file:
-            transcript = file.read()
-        messages = [
-            {
-                "role": "system",
-                "content": f"You are a coach. You are given a transcipt of a coaching session you just conducted. Your task is to answer any questions about the session, and also to provide answers to questions the client may ask. Here is the transcript: {transcript}"
-            }
-        ]
-    messages.append({"role": "user", "content": prompt})
-    response = llm.invoke(messages)
+
+    session_messages.append({"role": "user", "content": prompt})
+    response = llm.invoke(session_messages)
     append_message(response.content)
     return response.content
 

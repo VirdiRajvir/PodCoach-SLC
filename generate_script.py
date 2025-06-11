@@ -13,4 +13,4 @@ def generate_script(goal, name):
     with open('static/summary/summary.txt', 'w') as file:
         summary_response = llm.invoke(system_prompt)
         file.write(summary_response.content)
-    return response.content
+    return response.content, summary_response.content
