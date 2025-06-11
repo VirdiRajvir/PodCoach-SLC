@@ -114,7 +114,7 @@ def chat():
         return jsonify({'error': 'No message provided'}), 400
 
     user_message = data['message']
-    coach_reply = generate_response(user_message, session.get('messages'))
-    append_message(coach_reply)
+    coach_reply = generate_response(user_message, session)
+    append_message(coach_reply, session)
 
     return jsonify({'response': coach_reply})
