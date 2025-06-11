@@ -1,27 +1,37 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <h2>Coaching Session: {{ goal }}</h2>
 <p>This is where the AI coach will guide the session for your selected goal.</p>
 
-<div id="timer" style="font-size: 18px; font-weight: bold; color: #38964b;">
+<div id="timer" style="font-size: 18px; font-weight: bold; color: #38964b">
   Time left: 20:00
 </div>
-<img id="coach-gif" src="{{ url_for('static', filename='giffy.gif') }}" alt="Coach Animation" style=" width:500px; height:auto; margin-top:10px;">
+<img
+  id="coach-gif"
+  src="{{ url_for('static', filename='giffy.gif') }}"
+  alt="Coach Animation"
+  style="width: 500px; height: auto; margin-top: 10px"
+/>
 <audio id="audio" controls src="{{ audio_url }}"></audio>
-<br>
-<a class="link-underline-opacity-25 link-opacity-50 link-success" href="{{ url_for('summary') }}">Finish and View Summary</a>
+<br />
+<a
+  class="link-underline-opacity-25 link-opacity-50 link-success"
+  href="{{ url_for('summary') }}"
+  >Finish and View Summary</a
+>
 
 <script>
   let timeLeft = 20 * 60; // 20 minutes in seconds
-  const timerElement = document.getElementById('timer');
-  const audio = document.getElementById('audio');
+  const timerElement = document.getElementById("timer");
+  const audio = document.getElementById("audio");
 
   let countdown = null;
   let alertedTwoMinutes = false;
 
   function updateTimer() {
-    const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-    const seconds = (timeLeft % 60).toString().padStart(2, '0');
+    const minutes = Math.floor(timeLeft / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (timeLeft % 60).toString().padStart(2, "0");
     timerElement.textContent = `Time left: ${minutes}:${seconds}`;
 
     // Alert when 2 minutes left (120 seconds)
@@ -52,9 +62,6 @@
   // audio.addEventListener('pause', () => {
   //   pauseTimer();
   // });
-
-
 </script>
 
 {% endblock %}
-

@@ -1,16 +1,6 @@
 from langchain_ollama import ChatOllama
 
-global first_run
-first_run = True
 llm = ChatOllama(model="llama3")
-# with open('static/script/coaching_script.txt', 'r') as file:
-#     transcript = file.read()
-# messages = [
-#     {
-#         "role": "system",
-#         "content": f"You are a coach. You are given a transcipt of a coaching session you just conducted. Your task is to answer any questions about the session, and also to provide answers to questions the client may ask. Here is the transcript: {transcript}"
-#     }
-# ]
 
 def generate_response(prompt, session):
     """

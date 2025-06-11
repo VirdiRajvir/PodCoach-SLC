@@ -1,11 +1,16 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <h2>Give Feedback</h2>
-  <form action="{{ url_for('submit_feedback') }}" method="POST">
-    <div class="mb-3">
-      <label for="feedback" class="form-label">Your feedback:</label>
-      <textarea id="feedback" name="feedback" class="form-control" rows="5" required></textarea>
-    </div>
-    <button type="submit" class="btn btn-success">Submit</button>
-    </form>
+<form action="{{ url_for('submit_feedback') }}" method="POST">
+  <div class="mb-3">
+    <label for="feedback" class="form-label">Your feedback:</label>
+    <textarea
+      id="feedback"
+      name="feedback"
+      class="form-control"
+      rows="5"
+      required
+    ></textarea>
+  </div>
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>
 {% endblock %}

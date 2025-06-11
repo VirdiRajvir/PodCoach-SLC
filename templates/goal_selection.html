@@ -1,22 +1,19 @@
-{% extends "base.html" %}
-{% block content %}
-{% if username %}
-    <p>Hello, {{ username }}! Choose your goal:</p>
+{% extends "base.html" %} {% block content %} {% if username %}
+<p>Hello, {{ username }}! Choose your goal:</p>
 {% else %}
-    <p>Choose your goal:</p>
+<p>Choose your goal:</p>
 {% endif %}
 <ul>
-    <div class="text-center row">
-
+  <div class="text-center row">
     {% for goal in goals %}
     <div class="col-md-4 mb-3">
-    <form action="/start_coaching" method="POST">
-        <input type="hidden" name="goal" value="{{ goal }}">
-        <input type="hidden" name="username" value="{{ username }}">
+      <form action="/start_coaching" method="POST">
+        <input type="hidden" name="goal" value="{{ goal }}" />
+        <input type="hidden" name="username" value="{{ username }}" />
         <button type="submit" class="btn border-white">{{ goal }}</button>
-    </form>
+      </form>
     </div>
     {% endfor %}
-    </div>
+  </div>
 </ul>
 {% endblock %}

@@ -3,16 +3,14 @@ from generate_script import generate_script
 from generate_audio import generate_audio
 from generate_response import generate_response, append_message
 import os
-from langchain_ollama import ChatOllama
 import time
+
 app = Flask(__name__)
-app.secret_key = os.getenv('ELEVENLABS_API_KEY')
+app.secret_key = os.getenv('SECRET_KEY')
 
 @app.route('/', methods=['GET', 'POST'])
 def landing():
-    print(session)
     session.clear()
-    # session['messages'] = []
   # Clear session on landing page
     if request.method == 'POST':
         session['username'] = request.form.get('username')
@@ -27,8 +25,7 @@ def landing():
 @app.route('/goal_selection', defaults={'goal': None})
 @app.route('/goal_selection/<goal>')
 def goal_selection(goal=None):
-    print(session)
-    # session['username'] = request.args.get('username')
+
     if goal is None:
         # No goal selected yet — show list of goals
         goals = ["Focus", "Confidence", "Motivation"]
@@ -38,11 +35,10 @@ def goal_selection(goal=None):
         session['goal'] = goal
         return redirect(url_for('start_coaching'))
 
+
 @app.route('/start_coaching', methods=['POST'])
 def start_coaching():
-    print(session)
-    # session['goal'] = request.form.get('goal')
-    # username = request.form.get('username')
+
     if not session.get('goal'):
         goal = request.form.get('goal')
         if goal:
@@ -58,9 +54,6 @@ def start_coaching():
     # 2. Generate audio from script
     session['audio_file'] = generate_audio(session.get('script'), session.get('username'), session.get('goal'))  # returns something like 'static/audio/abc123.mp3'
 
-    # with open('static/script/coaching_script.txt', 'r') as file:
-    #     script = file.read()
-    # audio_file = 'static/audio/generated_audio.mp3'
     audio_url = '/' + session['audio_file'] + f'?v={int(time.time())}'
 
 
@@ -70,17 +63,14 @@ def start_coaching():
 
 @app.route('/summary')
 def summary():
-    print(session)
-    # with open('static/summary/summary.txt', 'r') as file:
-    #     summary_content = file.read()
-    # with open('static/script/coaching_script.txt', 'r') as file:
-    #     coaching_script = file.read()
     return render_template('summary.html', summary=session.get('summary'), script=session.get('script'))
+
 
 @app.route('/feedback', methods=['GET'])
 def feedback(): 
     print(session)
     return render_template('feedback.html')
+
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -106,6 +96,7 @@ def submit_feedback():
 @app.route('/feedback_thanks', methods=['GET'])
 def feedback_thanks():
     return render_template('feedback_thanks.html')
+
 
 @app.route('/chat', methods=['POST'])
 def chat():

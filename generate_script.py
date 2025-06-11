@@ -1,6 +1,15 @@
 from langchain_ollama import ChatOllama
 
 def generate_script(goal, name):
+    """
+    Generate a personalized coaching script based on the user's goal and name.
+    Args:
+        goal (str): The user's goal for the coaching session.
+        name (str): The user's name.
+    Returns:
+        str: The generated coaching script.
+        str: The summary of the coaching session.
+    """
     with open('static/feedback/feedback.txt', 'r') as file:
         feedback = file.read().strip()
     if not feedback:
@@ -10,11 +19,7 @@ def generate_script(goal, name):
                  temperature=0.1)
 
     response = llm.invoke(system_prompt)
-
-    # with open('static/script/coaching_script.txt', 'w') as file:
-    #     file.write(response.content)
     system_prompt = f"You are a summarizer assistant. Summarize the following coaching transcript and write only 3 actionable points: {response.content}"
-    # with open('static/summary/summary.txt', 'w') as file:
     summary_response = llm.invoke(system_prompt)
-    #     file.write(summary_response.content)
+
     return response.content, summary_response.content
