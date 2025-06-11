@@ -15,27 +15,20 @@
   let timeLeft = 20 * 60; // 20 minutes in seconds
   const timerElement = document.getElementById('timer');
   const audio = document.getElementById('audio');
-  // const coachGif = document.getElementById('coach-gif');
-  // audio.addEventListener('play', () => {
-  //   startTimer();
-  //   coachGif.style.display = 'block';
-  // });
-
-  // audio.addEventListener('pause', () => {
-  //   pauseTimer();
-  //   coachGif.style.display = 'none';
-  // });
-
-  // audio.addEventListener('ended', () => {
-  //   coachGif.style.display = 'none';
-  // });
 
   let countdown = null;
+  let alertedTwoMinutes = false;
 
   function updateTimer() {
     const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
     const seconds = (timeLeft % 60).toString().padStart(2, '0');
     timerElement.textContent = `Time left: ${minutes}:${seconds}`;
+
+    // Alert when 2 minutes left (120 seconds)
+    if (timeLeft === 120 && !alertedTwoMinutes) {
+      alertedTwoMinutes = true;
+      alert("Only 2 minutes left in your coaching session!");
+    }
 
     if (timeLeft <= 0) {
       clearInterval(countdown);
@@ -44,29 +37,23 @@
     timeLeft--;
   }
 
-  function startTimer() {
-    if (!countdown) {  // prevent multiple intervals
-      countdown = setInterval(updateTimer, 1000);
-    }
-  }
+  countdown = setInterval(updateTimer, 1000);
 
-  function pauseTimer() {
-    clearInterval(countdown);
-    countdown = null;
-  }
+  //earlier assumed timer was paused when audio was paused:
+  // function pauseTimer() {
+  //   clearInterval(countdown);
+  //   countdown = null;
+  // }
 
-  audio.addEventListener('play', () => {
-    startTimer();
-  });
+  // audio.addEventListener('play', () => {
+  //   startTimer();
+  // });
 
-  audio.addEventListener('pause', () => {
-    pauseTimer();
-  });
+  // audio.addEventListener('pause', () => {
+  //   pauseTimer();
+  // });
 
-  // Start timer if audio is already playing on load
-  if (!audio.paused) {
-    startTimer();
-  }
+
 </script>
 
 {% endblock %}
